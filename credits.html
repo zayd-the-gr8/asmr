@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>credits</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black: #000000;
+      --panel: #111114;
+      --panel-light: #17171c;
+      --cream: #eee8dc;
+      --muted: #898681;
+      --orange: #33d9e8;
+      --pink: #ff83b5;
+      --red: #e8335d;
+      --blue: #8bbcff;
+      --border: #29292e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--red);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--red);
+      background:
+        radial-gradient(
+          circle at 80% 15%,
+          rgba(255, 157, 98, 0.07),
+          transparent 25rem
+        ),
+        var(--black);
+      font-family: "Bitcount Grid Single", monospace;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.07;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 5px 5px;
+    }
+
+    .page {
+      width: min(760px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: auto;
+      padding: 28px 0 36px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 80px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .back-link {
+      color: var(--muted);
+      text-decoration: none;
+      transition: 180ms ease;
+    }
+
+    .back-link:hover {
+      color: var(--orange);
+      transform: translateX(-3px);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 0 0 13px var(--pink);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--cream);
+      font-size: clamp(38px, 8vw, 68px);
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .intro {
+      max-width: 450px;
+      margin: 24px 0 42px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .intro span {
+      color: var(--orange);
+    }
+
+    .credits-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .credit {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 19px 20px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 60%),
+        var(--panel);
+      transition: 180ms ease;
+    }
+
+    .credit:hover {
+      border-color: #514d54;
+      background-color: var(--panel-light);
+      transform: translateX(3px);
+    }
+
+    .credit-name {
+      margin: 0 0 7px;
+      color: var(--cream);
+    }
+
+    .credit-description {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .credit-link {
+      padding: 8px 11px;
+      border: 1px solid #39363d;
+      border-radius: 999px;
+      color: var(--orange);
+      font-size: 11px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: 180ms ease;
+    }
+
+    .credit-link:hover {
+      border-color: var(--orange);
+      background: rgba(255, 157, 98, 0.08);
+      box-shadow: 0 0 18px rgba(255, 157, 98, 0.1);
+    }
+
+    .add-note {
+      margin-top: 30px;
+      padding: 17px 20px;
+      border-left: 2px solid var(--blue);
+      color: var(--muted);
+      background: rgba(139, 188, 255, 0.04);
+      line-height: 1.6;
+    }
+
+    .add-note strong {
+      color: var(--blue);
+      font-weight: 400;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 76px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    footer a {
+      color: var(--cream);
+      text-decoration: none;
+      border-bottom: 1px solid #4a474b;
+    }
+
+    footer a:hover {
+      color: var(--orange);
+      border-color: var(--orange);
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        margin-bottom: 55px;
+      }
+
+      .credit {
+        grid-template-columns: 1fr;
+      }
+
+      .credit-link {
+        width: fit-content;
+      }
+
+      footer {
+        flex-direction: column;
+        margin-top: 52px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a class="back-link" href="index.html">← back home</a>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        <span>sources/credits...</span>
+      </div>
+    </header>
+
+    <section>
+      <h1>credits.</h1>
+
+      <p class="intro">
+        a small list of things used to make this little corner of the internet.
+        <span>thank you to the internet.</span>
+      </p>
+
+      <div class="credits-list">
+        <!-- Copy this entire credit block when adding another source -->
+
+        <article class="credit">
+          <div>
+            <p class="credit-name">Bitcount Grid Single</p>
+            <p class="credit-description">
+              Font used throughout the website.
+            </p>
+          </div>
+
+          <a
+            class="credit-link"
+            href="https://fonts.google.com/specimen/Bitcount+Grid+Single"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            visit source
+          </a>
+        </article>
+
+        <article class="credit">
+          <div>
+            <p class="credit-name">Codepen</p>
+            <p class="credit-description">
+              Helped figure out math difficulties with 2.0
+            </p>
+          </div>
+
+          <a
+            class="credit-link"
+            href="https://codepen.io/zayd1997"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            visit source
+          </a>
+        </article>
+
+        <article class="credit">
+          <div>
+            <p class="credit-name">Github Co-Pilot</p>
+          </div>
+
+          <a
+            class="credit-link"
+            href="https://github.com/zayd-the-gr8"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            visit source
+          </a>
+        </article>
+      </div>
+
+     
+
+    <footer>
+      <a href=https://github.com/zayd-the-gr8/zayd-the-gr8/blob/main/LICENSE><small>THIS WEBSITE IS PROTECTED WITH A BSD 2-CLAUSE LICENSE</small></a>
+      
+
+      <span>
+        made by
+        <a
+          href="https://zayd.pages.dev/"
+        >
+          Zayd
+        </a>
+      </span>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>nothing but a p thang</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:wght@100..900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black: #070707;
+      --near-black: #0d0d0f;
+      --panel: #111114;
+      --panel-light: #17171c;
+      --cream: #eee8dc;
+      --muted: #898681;
+      --orange: #ff9d62;
+      --pink: #ff83b5;
+      --blue: #8bbcff;
+      --green: #a8e6b0;
+      --glow: rgba(255, 157, 98, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--black);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 157, 98, 0.06), transparent 27rem),
+        radial-gradient(circle at 85% 80%, rgba(139, 188, 255, 0.045), transparent 24rem),
+        var(--black);
+      font-family: 'Bitcount Grid Single', monospace;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.075;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 5px 5px;
+      mix-blend-mode: soft-light;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(920px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: auto;
+      padding: 28px 0 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 56px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .sound-toggle {
+      border: 1px solid #29292e;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.025);
+      color: var(--muted);
+      padding: 7px 11px;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .sound-toggle:hover {
+      color: var(--cream);
+      border-color: #55525a;
+      transform: translateY(-1px);
+    }
+
+    .sound-toggle.is-on {
+      color: var(--orange);
+      border-color: rgba(255, 157, 98, 0.6);
+      box-shadow: 0 0 22px rgba(255, 157, 98, 0.09);
+    }
+
+    .hero {
+      max-width: 680px;
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--orange);
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 0;
+      font-size: clamp(34px, 7vw, 74px);
+      line-height: 0.94;
+      font-weight: 500;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+
+    .hero-copy {
+      max-width: 440px;
+      margin: 25px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-copy span {
+      color: var(--cream);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 230px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid #222227;
+      border-radius: 20px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.035), transparent 55%),
+        var(--panel);
+      box-shadow:
+        0 20px 70px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+    }
+
+    .card-title {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .card-note {
+      position: relative;
+      z-index: 1;
+      max-width: 240px;
+      margin: 12px 0 0;
+      color: var(--cream);
+      line-height: 1.55;
+    }
+
+    .breathing-card {
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .breathing-orb {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 136px;
+      height: 136px;
+      border: 1px solid rgba(255, 157, 98, 0.6);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 32%, rgba(255,255,255,0.6), transparent 5%),
+        radial-gradient(circle, rgba(255, 157, 98, 0.35), rgba(255, 157, 98, 0.04) 58%, transparent 70%);
+      box-shadow:
+        0 0 40px rgba(255, 157, 98, 0.12),
+        inset 0 0 30px rgba(255, 157, 98, 0.1);
+      transform: translate(-50%, -46%) scale(0.82);
+      transition: 900ms cubic-bezier(.2,.8,.2,1);
+      cursor: pointer;
+    }
+
+    .breathing-orb::after {
+      content: "tap";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,0.72);
+      font-size: 11px;
+    }
+
+    .breathing-orb:hover {
+      transform: translate(-50%, -46%) scale(0.9);
+      box-shadow:
+        0 0 65px rgba(255, 157, 98, 0.2),
+        inset 0 0 30px rgba(255, 157, 98, 0.14);
+    }
+
+    .breathing-orb.breathe {
+      transform: translate(-50%, -46%) scale(1.18);
+    }
+
+    .orb-caption {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .tiny-things {
+      min-height: 320px;
+    }
+
+    .tiny-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 31px;
+    }
+
+    .tiny-button {
+      position: relative;
+      aspect-ratio: 1;
+      border: 1px solid #303036;
+      border-radius: 13px;
+      background: var(--panel-light);
+      cursor: pointer;
+      transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background 160ms ease,
+        box-shadow 160ms ease;
+    }
+
+    .tiny-button::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--button-color, var(--orange));
+      box-shadow: 0 0 12px var(--button-color, var(--orange));
+      transform: translate(-50%, -50%);
+      transition: 200ms ease;
+    }
+
+    .tiny-button:hover {
+      border-color: var(--button-color, var(--orange));
+      background: rgba(255,255,255,0.055);
+      transform: translateY(-3px) rotate(4deg);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
+
+    .tiny-button:active,
+    .tiny-button.clicked {
+      transform: scale(0.86) rotate(-5deg);
+      background: rgba(255,255,255,0.11);
+    }
+
+    .tiny-button.clicked::before {
+      width: 15px;
+      height: 15px;
+      opacity: 0.1;
+    }
+
+    .tiny-button:nth-child(2) { --button-color: var(--pink); }
+    .tiny-button:nth-child(3) { --button-color: var(--blue); }
+    .tiny-button:nth-child(4) { --button-color: var(--green); }
+    .tiny-button:nth-child(5) { --button-color: #d4a7ff; }
+    .tiny-button:nth-child(6) { --button-color: #fff0a4; }
+    .tiny-button:nth-child(7) { --button-color: #91d8d1; }
+    .tiny-button:nth-child(8) { --button-color: #ffb6b6; }
+    .tiny-button:nth-child(9) { --button-color: #c4b7ff; }
+    .tiny-button:nth-child(10) { --button-color: #ffc986; }
+
+    .click-counter {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 27px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .counter-number {
+      color: var(--cream);
+      font-size: 22px;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      min-height: 145px;
+      padding: 18px;
+      border: 1px solid #222227;
+      border-radius: 18px;
+      background: #0e0e11;
+      transition: 180ms ease;
+    }
+
+    .mini-card:hover {
+      border-color: #3b3940;
+      transform: translateY(-2px);
+    }
+
+    .mini-label {
+      margin: 0 0 19px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .mini-action {
+      width: 100%;
+      min-height: 62px;
+      border: 1px solid #2d2d34;
+      border-radius: 13px;
+      background: #151519;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .mini-action:hover {
+      background: #1b1b21;
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .mini-action:active {
+      transform: scale(0.96);
+    }
+
+    .lamp {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      margin: auto;
+      border: 1px solid #55515a;
+      border-radius: 50%;
+      background: #19191e;
+      transition: 250ms ease;
+    }
+
+    .lamp::after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 9px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #69636c;
+      transition: 250ms ease;
+    }
+
+    .lamp.on {
+      border-color: var(--orange);
+      box-shadow: 0 0 28px var(--glow);
+    }
+
+    .lamp.on::after {
+      background: var(--orange);
+      box-shadow: 0 0 16px var(--orange);
+    }
+
+    .mood-word {
+      display: block;
+      margin-top: 10px;
+      color: var(--pink);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 60px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .footer a {
+      color: var(--cream);
+      text-decoration: none;
+      border-bottom: 1px solid #4a474b;
+      transition: 180ms ease;
+    }
+
+    .footer a:hover {
+      color: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      z-index: 5;
+      padding: 10px 14px;
+      border: 1px solid #3b393f;
+      border-radius: 999px;
+      background: rgba(20, 20, 23, 0.9);
+      color: var(--cream);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: 240ms ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .ripple {
+      position: fixed;
+      z-index: 10;
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--orange);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: ripple 650ms ease-out forwards;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.55; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    @keyframes ripple {
+      to {
+        width: 90px;
+        height: 90px;
+        opacity: 0;
+        transform: translate(-39px, -39px);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding-top: 20px;
+      }
+
+      .topbar {
+        margin-bottom: 42px;
+      }
+
+      .workspace,
+      .bottom-row {
+        grid-template-columns: 1fr;
+      }
+
+      .breathing-card,
+      .tiny-things {
+        min-height: 280px;
+      }
+
+      .footer {
+        flex-direction: column;
+        padding-top: 42px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="status">
+        <span class="status-dot"></span>
+        <span id="statusText">quietly online</span>
+      </div>
+
+      <button class="sound-toggle" id="soundToggle" type="button">
+        sound: off
+      </button>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">/ a tiny place that literally is like nothing</p>
+
+      <h1>this is absolutely<br> <strong>nothing</strong> </h1>
+
+      <p class="hero-copy">
+         just <span>soft clicks, hard clicks</span>,
+        and things that feel nice to press for no reason. this has taken me a very longish time to make. <a class="credits-link" href="credits.html">
+  credits
+</a>
+      </p>
+    </section>
+
+    <section class="workspace">
+      <article class="card breathing-card">
+        <div>
+          <p font size="11px" class="card-title">01 / random orange circle thingie</p>
+          <p class="card-note">tap it. there is absolutely <strong>no</strong> correct way to do this.</p>
+        </div>
+
+        <button
+          class="breathing-orb"
+          id="breathingOrb"
+          type="button"
+          aria-label="Tap the glowing orb"
+        ></button>
+
+        <p class="orb-caption" id="orbCaption">the orb is waiting patiently</p>
+      </article>
+
+      <article class="card tiny-things">
+        <p class="card-title">02 / small pointless buttons</p>
+        <p class="card-note">they don't do anything, except look and feel good</p>
+
+        <div class="tiny-grid" id="tinyGrid">
+          <button class="tiny-button" type="button" aria-label="Tiny orange button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny pink button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny blue button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny green button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny purple button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny yellow button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny teal button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny red button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny lavender button"></button>
+          <button class="tiny-button" type="button" aria-label="Tiny peach button"></button>
+        </div>
+
+        <div class="click-counter">
+          <span>pointless clicks</span>
+          <span class="counter-number" id="clickCount">0</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="bottom-row">
+      <article class="mini-card">
+        <p class="mini-label">03 / a lamp except it doesnt look like a lamp</p>
+
+        <button class="mini-action" id="lampButton" type="button">
+          <span class="lamp" id="lamp"></span>
+        </button>
+      </article>
+
+      <article class="mini-card">
+        <p class="mini-label">04 / current mood</p>
+
+        <button class="mini-action" id="moodButton" type="button">
+          <span class="mood-word" id="moodWord">hmm</span>
+        </button>
+      </article>
+
+      <article class="mini-card">
+        <p class="mini-label">05 / reset everything</p>
+
+        <button class="mini-action" id="resetButton" type="button">
+          gently reset
+        </button>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <footer> <a href=https://github.com/zayd-the-gr8/zayd-the-gr8/blob/main/LICENSE><small>THIS WEBSITE IS PROTECTED WITH A BSD 2-CLAUSE LICENSE,</small></a> 
+
+      <span>
+        made with love by
+        <a
+          href="https://zayd.pages.dev/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Zayd</a>
+      </span>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast">nice.</div>
+
+  <script>
+    const soundToggle = document.querySelector("#soundToggle");
+    const statusText = document.querySelector("#statusText");
+    const clickCount = document.querySelector("#clickCount");
+    const tinyButtons = document.querySelectorAll(".tiny-button");
+    const breathingOrb = document.querySelector("#breathingOrb");
+    const orbCaption = document.querySelector("#orbCaption");
+    const lampButton = document.querySelector("#lampButton");
+    const lamp = document.querySelector("#lamp");
+    const moodButton = document.querySelector("#moodButton");
+    const moodWord = document.querySelector("#moodWord");
+    const resetButton = document.querySelector("#resetButton");
+    const toast = document.querySelector("#toast");
+
+    let count = 0;
+    let soundOn = false;
+    let audioContext;
+
+    const moods = [
+      "normal ig?",
+      "mid",
+      "lwky aura farming",
+      "plotting world domination",
+      "im sad, zayd didnt make the sounds asmr enough",
+      "w",
+      "firee🔥",
+      "im so bored ima fall asleep"
+    ];
+
+    const orbMessages = [
+      "the orb approves",
+      "very gently done",
+      "that was satisfying",
+      "the void feels softer",
+      "excellent little tap",
+      "nothing changed. perfect."
+    ];
+
+    function getAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+
+      return audioContext;
+    }
+
+    function playClick(type = "soft") {
+      if (!soundOn) return;
+
+      const context = getAudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+
+      oscillator.type = type === "deep" ? "sine" : "triangle";
+      oscillator.frequency.value = type === "deep" ? 95 : 210;
+      oscillator.frequency.exponentialRampToValueAtTime(
+        type === "deep" ? 55 : 125,
+        context.currentTime + 0.09
+      );
+
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.045, context.currentTime + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.12);
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.13);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      clearTimeout(showToast.timeout);
+      showToast.timeout = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1300);
+    }
+
+    function addRipple(event) {
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = `${event.clientX}px`;
+      ripple.style.top = `${event.clientY}px`;
+      document.body.appendChild(ripple);
+
+      setTimeout(() => ripple.remove(), 700);
+    }
+
+    function addClick() {
+      count += 1;
+      clickCount.textContent = count;
+    }
+
+    soundToggle.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundToggle.textContent = `sound: ${soundOn ? "on" : "off"}`;
+      soundToggle.classList.toggle("is-on", soundOn);
+      statusText.textContent = soundOn ? "quietly making sounds" : "quietly online";
+
+      if (soundOn) {
+        playClick();
+        showToast("tiny sound enabled");
+      } else {
+        showToast("back to silence");
+      }
+    });
+
+    tinyButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        button.classList.remove("clicked");
+        void button.offsetWidth;
+        button.classList.add("clicked");
+
+        addClick();
+        addRipple(event);
+        playClick();
+        showToast("good button");
+      });
+    });
+
+    breathingOrb.addEventListener("click", (event) => {
+      breathingOrb.classList.remove("breathe");
+      void breathingOrb.offsetWidth;
+      breathingOrb.classList.add("breathe");
+
+      orbCaption.textContent =
+        orbMessages[Math.floor(Math.random() * orbMessages.length)];
+
+      addClick();
+      addRipple(event);
+      playClick("deep");
+
+      setTimeout(() => {
+        breathingOrb.classList.remove("breathe");
+      }, 850);
+    });
+
+    lampButton.addEventListener("click", () => {
+      lamp.classList.toggle("on");
+      addClick();
+      playClick();
+
+      showToast(lamp.classList.contains("on") ? "warmer now" : "back to the dark");
+    });
+
+    moodButton.addEventListener("click", () => {
+      const currentMood = moodWord.textContent;
+      const availableMoods = moods.filter((mood) => mood !== currentMood);
+      const nextMood =
+        availableMoods[Math.floor(Math.random() * availableMoods.length)];
+
+      moodWord.textContent = nextMood;
+      addClick();
+      playClick();
+    });
+
+    resetButton.addEventListener("click", () => {
+      count = 0;
+      clickCount.textContent = "0";
+      lamp.classList.remove("on");
+      moodWord.textContent = "hmm";
+      orbCaption.textContent = "the orb is waiting patiently";
+
+      tinyButtons.forEach((button) => button.classList.remove("clicked"));
+
+      playClick();
+      showToast("everything is gently reset");
+    });
+
+    document.addEventListener("click", (event) => {
+      if (
+        event.target.matches("button") ||
+        event.target.closest("button") ||
+        event.target.matches("a") ||
+        event.target.closest("a")
+      ) {
+        return;
+      }
+
+      if (Math.random() > 0.6) {
+        showToast("the background noticed");
+      }
+    });
+  </script>
+
+<!-- thing in the  -->
+<div class="pointless-strip" aria-live="polite">
+  <span class="pointless-strip-label">pointless clicks</span>
+  <span class="pointless-strip-count" id="cornerClickCount">0</span>
+</div>
+
+<style>
+  .pointless-strip {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 9px 12px;
+    border: 1px solid #29292e;
+    border-radius: 999px;
+
+    background: rgba(17, 17, 20, 0.88);
+    color: #898681;
+
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+    backdrop-filter: blur(12px);
+    transition: 180ms ease;
+  }
+
+  .pointless-strip:hover {
+    border-color: #4a474d;
+    color: #eee8dc;
+    transform: translateY(-2px);
+  }
+
+  .pointless-strip-label {
+    white-space: nowrap;
+  }
+
+  .pointless-strip-count {
+    min-width: 18px;
+    color: #ff9d62;
+    text-align: right;
+    text-shadow: 0 0 12px rgba(255, 157, 98, 0.45);
+  }
+
+  @media (max-width: 500px) {
+    .pointless-strip {
+      right: 12px;
+      bottom: 12px;
+      padding: 8px 10px;
+      font-size: 10px;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const existingCounter = document.querySelector("#clickCount");
+    const cornerCounter = document.querySelector("#cornerClickCount");
+
+    if (!cornerCounter) return;
+
+    function syncCornerCounter() {
+      if (existingCounter) {
+        cornerCounter.textContent = existingCounter.textContent;
+      }
+    }
+
+    syncCornerCounter();
+
+    if (existingCounter) {
+      const observer = new MutationObserver(syncCornerCounter);
+
+      observer.observe(existingCounter, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
+  })();
+</script>
+
+
+  
+</body>
+</html>
